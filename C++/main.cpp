@@ -7,8 +7,11 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+//#include <math.h>
 
-#define PI 3.14
+#include "fonctions.hpp"
+
+#define PI 3.14159265359
 
 double getTime()
 {
@@ -62,6 +65,8 @@ int convertToString(const char *filename, std::string& s)
 	return -1;
 }
 
+
+
 class OpenClCompute
 {
 public:
@@ -82,7 +87,7 @@ public:
         {
             cl_platform_id* platforms = (cl_platform_id* )malloc(numPlatforms* sizeof(cl_platform_id));
             status = clGetPlatformIDs(numPlatforms, platforms, NULL);
-            platform = platforms[1];
+            platform = platforms[0];
             free(platforms);
         }
 
@@ -158,7 +163,7 @@ public:
         cl_mem xKernel = clCreateBuffer(mContext, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, pointNumber*6*sizeof(float), 
             x, &error);
 
-        float* coefs = new float[coefNumber];
+        float* coefs = new float[coefNumber*2];
         cl_mem coefsKernel = clCreateBuffer(mContext, CL_MEM_WRITE_ONLY | CL_MEM_COPY_HOST_PTR, coefNumber*sizeof(float), 
             coefs, &error);
 
@@ -214,6 +219,7 @@ public:
 
 int main()
 {
+	/*
     int i, j;
     char* value;
     size_t valueSize;
@@ -280,7 +286,7 @@ int main()
     free(platforms);
 
     OpenClCompute gpu;
-    gpu.init();
+    gpu.init();*/
     //gpu.loadProgram("HelloWorld_Kernel.cl");
 //    gpu.runProgram();
 
@@ -329,6 +335,64 @@ int main()
     }
     double t2 = getTime();
     std::cout<< "final Time: "<<t2-t1;*/
-    char a;
-    std::cin >> a;
+//    char a;
+//    std::cin >> a;
+
+// test generation grille
+	float lambdamax[3];
+	lambdamax[0] = 1;
+	lambdamax[1] = 1;
+	lambdamax[2] = 1;
+
+	float anglemax[3];
+	anglemax[0] = 1;
+	anglemax[1] = 1;
+	anglemax[2] = 1;
+
+	float pas[6];
+	pas[0] = 1.5;
+	pas[1] = 1.5;
+	pas[2] = 1.5;
+	pas[3] = 1.5;
+	pas[4] = 1.5;
+	pas[5] = 0.1;
+	
+	int nb_points = nombrePoints(lambdamax, anglemax, pas);
+
+	std::cout << " \n" << nb_points;
+	
+	float* grille = new float[nb_points * 6];
+	grille = generationGrille(lambdamax, anglemax, pas);
+	/*std::cout << " \n" << grille[ 0];
+	std::cout << " " << grille[ 1];
+	std::cout << " " << grille[ 2];
+	std::cout << " " << grille[ 3];
+	std::cout << " " << grille[ 4];
+	std::cout << " " << grille[ 5];
+	std::cout << " \n" << grille[6+0];
+	std::cout << " " << grille[6+1];
+	std::cout << " " << grille[6+2];
+	std::cout << " " << grille[6+3];
+	std::cout << " " << grille[6+4];
+	std::cout << " " << grille[6+5];*/
+	/*int i;
+	for (i = 0; i < nb_points; i++){
+		std::cout << " \n" << grille[i * 6];
+		std::cout << " " << grille[i * 6 + 1];
+		std::cout << " " << grille[i * 6 + 2];
+		std::cout << " " << grille[i * 6 + 3];
+		std::cout << " " << grille[i * 6 + 4];
+		std::cout << " " << grille[i * 6 + 5];
+	}*/
+	//std::cout << " " << grille[nb_points*6-2];
+	float a3;
+	for (a3 = 0; a3 <= 1.1; a3 = a3 + 0.1){
+		std::cout << " \n" << a3;
+	}
+
+
+
+
+
+	system("PAUSE");
 }
